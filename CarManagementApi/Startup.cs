@@ -4,6 +4,7 @@ using CarManagementApi.Models.Entities;
 using CarManagementApi.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,9 +33,10 @@ namespace CarManagementApi
                 options => options.UseSqlServer(Configuration.GetConnectionString("CarManagementConnection"))
             );
 
-            //services.AddIdentity<>()
-            //    .AddDefaultTokenProviders()
-            //    .AddEntityFrameworkStores<>()
+            services
+                .AddIdentity<AppUser, AppRole>()
+                .AddEntityFrameworkStores<CarManagementContext>()
+                .AddDefaultTokenProviders();
 
             var names = new[] { "Service", "Repository" };
 
