@@ -32,9 +32,7 @@ namespace CarManagementApi.Controllers
                 return InternalServerError(response);
             }
 
-            return response is Success { Response: null }
-                ? NotFound(new { id })
-                : Ok(response);
+            return response.NotFound() ? NotFound(new { id }) : Ok(response);
         }
 
         [HttpPost]
@@ -59,7 +57,14 @@ namespace CarManagementApi.Controllers
         [HttpPut("{id:required}")]
         public async Task<IActionResult> Update(int id, ModelRequest request)
         {
-            return OkResponse(await service.Update(id, request).ConfigureAwait(false));
+            var response = await service.Update(id, request).ConfigureAwait(false);
+
+            if (response.Failed())
+            {
+                return InternalServerError(response);
+            }
+
+            return response.NotFound() ? NotFound(new { id }) : Ok(response);
         }
 
         [HttpDelete("{id:required}")]

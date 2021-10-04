@@ -45,7 +45,7 @@ namespace CarManagementApi.Services
                         .GetAll(pageNumber, pageSize)
                         .ConfigureAwait(false);
 
-                    return mapper.Map<List<TDto>>(response);
+                    return ResponseHandler.Success(mapper.Map<List<TDto>>(response));
                 }
             );
         }
@@ -57,7 +57,9 @@ namespace CarManagementApi.Services
                 {
                     var response = await repository.GetById(id).ConfigureAwait(false);
 
-                    return mapper.Map<TDto>(response);
+                    return response is null
+                        ? ResponseHandler.NotFound()
+                        : ResponseHandler.Success(mapper.Map<TDto>(response));
                 }
             );
         }
@@ -76,7 +78,7 @@ namespace CarManagementApi.Services
                         .GetById(mappedEntity.Id)
                         .ConfigureAwait(false);
 
-                    return mapper.Map<TDto>(entity);
+                    return ResponseHandler.Success(mapper.Map<TDto>(entity));
                 }
             );
         }
@@ -88,11 +90,16 @@ namespace CarManagementApi.Services
                 {
                     var entity = await repository.GetById(id).ConfigureAwait(false);
 
+                    if (entity is null)
+                    {
+                        return ResponseHandler.NotFound();
+                    }
+
                     Update(entity, request);
 
                     await unitOfWork.Complete().ConfigureAwait(false);
 
-                    return mapper.Map<TDto>(entity);
+                    return ResponseHandler.Success(mapper.Map<TDto>(entity));
                 }
             );
         }

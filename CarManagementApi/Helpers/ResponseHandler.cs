@@ -13,6 +13,8 @@ namespace CarManagementApi.Helpers
 
         public static Validation Validations(IEnumerable<string> errors) => new(errors);
 
+        public static NotFound NotFound() => new();
+
         public static Unauthorized Unauthorized(string error) => new(new[] { error });
 
         public static Unauthorized Unauthorized(IEnumerable<string> errors) => new(errors);
@@ -21,17 +23,17 @@ namespace CarManagementApi.Helpers
 
         public static Failure Failure(IEnumerable<string> errors) => new(errors);
 
-        public static async Task<IResponse> HandleErrors<TReturn>(Func<Task<TReturn>> executor) where TReturn : class
-        {
-            try
-            {
-                return Success(await executor().ConfigureAwait(false));
-            }
-            catch (Exception ex)
-            {
-                return Failure(new[] { ex.Message });
-            }
-        }
+        //public static async Task<IResponse> HandleErrors<TReturn>(Func<Task<TReturn>> executor) where TReturn : class
+        //{
+        //    try
+        //    {
+        //        return Success(await executor().ConfigureAwait(false));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return Failure(new[] { ex.Message });
+        //    }
+        //}
 
         public static async Task<IResponse> HandleErrors(Func<Task<IResponse>> executor)
         {
