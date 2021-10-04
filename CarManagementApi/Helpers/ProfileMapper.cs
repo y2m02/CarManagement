@@ -14,6 +14,13 @@ namespace CarManagementApi.Helpers
 
             CreateMap<Type, TypeDto>();
             CreateMap<TypeRequest, Type>();
+
+            CreateMap<Model, ModelDto>()
+                .ForMember(
+                    destination => destination.BrandName,
+                    option => option.MapFrom(member => member.Brand.Name)
+                );
+            CreateMap<ModelRequest, Model>();
         }
     }
 }
