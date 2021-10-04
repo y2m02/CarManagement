@@ -11,6 +11,9 @@ namespace CarManagementApi.Helpers
         {
             CreateMap<Brand, BrandDto>();
             CreateMap<BrandRequest, Brand>();
+
+            CreateMap<Type, TypeDto>();
+            CreateMap<TypeRequest, Type>();
         }
     }
 }

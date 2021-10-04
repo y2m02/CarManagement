@@ -9,8 +9,8 @@ namespace CarManagementApi.Repositories
         ITypeRepository Types { get; }
         IModelRepository Models { get; }
         IVehicleRepository Vehicles { get; }
-        BaseRepository<TEntity> Entity<TEntity>() where TEntity : BaseEntity, new();
 
+        BaseRepository<TEntity> Entity<TEntity>() where TEntity : BaseEntity, new();
         Task Complete();
     }
 
