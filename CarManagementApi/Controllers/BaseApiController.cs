@@ -8,6 +8,7 @@ namespace CarManagementApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class BaseApiController : ControllerBase
     {
         protected ObjectResult InternalServerError(object value)

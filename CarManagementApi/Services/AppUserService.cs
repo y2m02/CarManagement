@@ -1,4 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using CarManagementApi.Helpers;
@@ -8,6 +13,8 @@ using CarManagementApi.Models.Results;
 using CarManagementApi.Repositories;
 using HelpersLibrary.Extensions;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 
 namespace CarManagementApi.Services
 {
@@ -20,17 +27,20 @@ namespace CarManagementApi.Services
 
     public class AppUserService : IAppUserService
     {
+        private readonly IConfiguration configuration;
         private readonly IMapper mapper;
         private readonly IAppUserRepository repository;
         private readonly SignInManager<AppUser> signInManager;
 
         public AppUserService(
             IMapper mapper,
+            IConfiguration configuration,
             IAppUserRepository repository,
             SignInManager<AppUser> signInManager
         )
         {
             this.mapper = mapper;
+            this.configuration = configuration;
             this.repository = repository;
             this.signInManager = signInManager;
         }
@@ -67,10 +77,12 @@ namespace CarManagementApi.Services
 
                     if (!result.Succeeded)
                     {
-                        return ResultHandler.Unauthorized("Unauthorized");
+                        return ResultHandler.Unauthorized("Invalid credentials");
                     }
 
-                    return ResultHandler.Success();
+                    var token = await GenerateToken(request.UserName).ConfigureAwait(false);
+
+                    return ResultHandler.Success(token);
                 }
             );
         }
@@ -93,6 +105,37 @@ namespace CarManagementApi.Services
                         : ResultHandler.Validations(result.Errors.Select(e => e.Description));
                 }
             );
+        }
+
+        private async Task<string> GenerateToken(string userName)
+        {
+            var token = new JwtSecurityToken(
+                issuer: configuration["JWT:ValidIssuer"],
+                audience: configuration["JWT:ValidAudience"],
+                expires: 30.Minutes().FromNow(),
+                claims: await GetClaims(userName).ConfigureAwait(false),
+                signingCredentials: new SigningCredentials(
+                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"])),
+                    SecurityAlgorithms.HmacSha256Signature
+                )
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        private async Task<List<Claim>> GetClaims(string userName)
+        {
+            var claims = new List<Claim>
+            {
+                new(ClaimTypes.Name, userName),
+                new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            };
+
+            var roles = await repository.GetRoles(userName).ConfigureAwait(false);
+
+            claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
+
+            return claims;
         }
     }
 }

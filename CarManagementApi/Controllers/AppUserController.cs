@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using CarManagementApi.Helpers;
 using CarManagementApi.Models.Requests;
 using CarManagementApi.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -12,6 +13,7 @@ namespace CarManagementApi.Controllers
 
         public AppUserController(IAppUserService service) => this.service = service;
 
+        [AllowAnonymous]
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] RegisterAppUserRequest request)
         {
@@ -20,6 +22,7 @@ namespace CarManagementApi.Controllers
             return result.HasValidation() ? BadRequest(result) : OkResponse(result);
         }
 
+        [AllowAnonymous]
         [HttpPost("SignIn")]
         public async Task<IActionResult> SignIn([FromBody] SignInRequest request)
         {
@@ -28,8 +31,8 @@ namespace CarManagementApi.Controllers
             return result.Unauthorized() ? Unauthorized(result) : OkResponse(result);
         }
 
+        [Authorize(Roles = AppUserRoles.Admin)]
         [HttpPost("AddToRoles")]
-        [Authorize]
         public async Task<IActionResult> AddToRoles([FromBody] AddAppUserToRolesRequest request)
         {
             var result = await service.AddToRoles(request).ConfigureAwait(false);

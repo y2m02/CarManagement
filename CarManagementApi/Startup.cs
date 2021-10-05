@@ -1,9 +1,9 @@
 using System.Linq;
-using System.Net;
+using System.Text;
 using CarManagementApi.Helpers;
 using CarManagementApi.Models.Entities;
 using CarManagementApi.Repositories;
-using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 
 namespace CarManagementApi
 {
@@ -43,6 +44,33 @@ namespace CarManagementApi
                 .AddIdentity<AppUser, AppRole>()
                 .AddEntityFrameworkStores<CarManagementContext>()
                 .AddDefaultTokenProviders();
+
+            services
+                .AddAuthentication(
+                    option =>
+                    {
+                        option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                        option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                        option.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                    }
+                )
+                .AddJwtBearer(
+                    option =>
+                    {
+                        option.SaveToken = true;
+
+                        option.TokenValidationParameters = new()
+                        {
+                            ValidateIssuer = true,
+                            ValidIssuer = Configuration["JWT:ValidIssuer"],
+                            ValidateAudience = true,
+                            ValidAudience = Configuration["JWT:ValidAudience"],
+                            IssuerSigningKey = new SymmetricSecurityKey(
+                                Encoding.UTF8.GetBytes(Configuration["JWT:Secret"])
+                            ),
+                        };
+                    }
+                );
 
             var names = new[] { "Service", "Repository" };
 
