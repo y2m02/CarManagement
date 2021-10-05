@@ -2,9 +2,9 @@
 
 namespace CarManagementApi.Models.Requests
 {
-    public class AddToRolesRequest
+    public class AddAppUserToRolesRequest
     {
-        public string UserId { get; set; }
+        public string UserName { get; set; }
         public IEnumerable<string> Roles { get; set; }
     }
 }

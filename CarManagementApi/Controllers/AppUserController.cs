@@ -30,7 +30,7 @@ namespace CarManagementApi.Controllers
 
         [HttpPost("AddToRoles")]
         [Authorize]
-        public async Task<IActionResult> AddToRoles([FromBody] AddToRolesRequest request)
+        public async Task<IActionResult> AddToRoles([FromBody] AddAppUserToRolesRequest request)
         {
             var result = await service.AddToRoles(request).ConfigureAwait(false);
 

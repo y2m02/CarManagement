@@ -10,9 +10,10 @@ namespace CarManagementApi.Repositories
     public interface IAppUserRepository
     {
         Task<List<AppUser>> GetAll();
+        Task<AppUser> GetByUserName(string userName);
         Task<IdentityResult> Add(AppUser user, string password);
         Task<IdentityResult> AddToRole(string id, string role);
-        Task<IdentityResult> AddToRoles(string id, IEnumerable<string> roles);
+        Task<IdentityResult> AddToRoles(AppUser user, IEnumerable<string> roles);
         Task<List<string>> GetRoles(string userName);
     }
 
@@ -30,6 +31,11 @@ namespace CarManagementApi.Repositories
             return userManager.Users.ToListAsync();
         }
 
+        public Task<AppUser> GetByUserName(string userName)
+        {
+            return userManager.Users.SingleAsync(u => u.UserName == userName);
+        }
+
         public Task<IdentityResult> Add(AppUser user, string password)
         {
             return userManager.CreateAsync(user, password);
@@ -40,9 +46,9 @@ namespace CarManagementApi.Repositories
             return userManager.AddToRoleAsync(new AppUser { Id = id }, role);
         }
 
-        public Task<IdentityResult> AddToRoles(string id, IEnumerable<string> roles)
+        public async Task<IdentityResult> AddToRoles(AppUser user, IEnumerable<string> roles)
         {
-            return userManager.AddToRolesAsync(new AppUser { Id = id }, roles);
+            return await userManager.AddToRolesAsync(user, roles);
         }
 
         public async Task<List<string>> GetRoles(string userName)

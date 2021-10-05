@@ -15,7 +15,7 @@ namespace CarManagementApi.Services
     {
         Task<IResult> Register(RegisterAppUserRequest request);
         Task<IResult> SignIn(SignInRequest request);
-        Task<IResult> AddToRoles(AddToRolesRequest request);
+        Task<IResult> AddToRoles(AddAppUserToRolesRequest request);
     }
 
     public class AppUserService : IAppUserService
@@ -75,13 +75,17 @@ namespace CarManagementApi.Services
             );
         }
 
-        public Task<IResult> AddToRoles(AddToRolesRequest request)
+        public Task<IResult> AddToRoles(AddAppUserToRolesRequest request)
         {
             return ResultHandler.HandleErrors(
                 async () =>
                 {
+                    var user = await repository
+                        .GetByUserName(request.UserName)
+                        .ConfigureAwait(false);
+
                     var result = await repository
-                        .AddToRoles(request.UserId, request.Roles)
+                        .AddToRoles(user, request.Roles)
                         .ConfigureAwait(false);
 
                     return result.Succeeded

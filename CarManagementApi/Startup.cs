@@ -32,7 +32,11 @@ namespace CarManagementApi
             services.AddAutoMapper(option => option.AddProfile<ProfileMapper>());
 
             services.AddDbContext<CarManagementContext>(
-                options => options.UseSqlServer(Configuration.GetConnectionString("CarManagementConnection"))
+                options =>
+                {
+                    options.EnableSensitiveDataLogging();
+                    options.UseSqlServer(Configuration.GetConnectionString("CarManagementConnection"));
+                }
             );
 
             services
