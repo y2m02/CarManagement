@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace CarManagementApi.Models.Responses
+namespace CarManagementApi.Models.Results
 {
-    public class Unauthorized: IResponse
+    public class Unauthorized: IResult
     {
         public Unauthorized() { }
 

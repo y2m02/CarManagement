@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
-using CarManagementApi.Models.Dtos;
 using CarManagementApi.Models.Entities;
 using CarManagementApi.Models.Requests;
+using CarManagementApi.Models.Responses;
 using CarManagementApi.Repositories;
 
 namespace CarManagementApi.Services
 {
     public interface IModelService : IService<ModelRequest> { }
 
-    public class ModelService : BaseService<Model, ModelDto, ModelRequest>, IModelService
+    public class ModelService : BaseService<Model, ModelResponse, ModelRequest>, IModelService
     {
         public ModelService(
             IUnitOfWork unitOfWork,

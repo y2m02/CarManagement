@@ -1,6 +1,6 @@
-﻿namespace CarManagementApi.Models.Responses
+﻿namespace CarManagementApi.Models.Results
 {
-    public interface IResponse
+    public interface IResult
     {
         sealed bool Succeeded() => this is Success;
         sealed bool HasValidation() => this is Validation;

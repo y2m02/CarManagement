@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using CarManagementApi.Models.Responses;
+using CarManagementApi.Models.Results;
 
 namespace CarManagementApi.Helpers
 {
-    public static class ResponseHandler
+    public static class ResultHandler
     {
         public static Success Success() => new();
 
@@ -38,7 +38,7 @@ namespace CarManagementApi.Helpers
         //    }
         //}
 
-        public static async Task<IResponse> HandleErrors(Func<Task<IResponse>> executor)
+        public static async Task<IResult> HandleErrors(Func<Task<IResult>> executor)
         {
             try
             {
@@ -50,7 +50,7 @@ namespace CarManagementApi.Helpers
             }
         }
 
-        public static async Task<IResponse> HandleErrors(Func<Task> executor)
+        public static async Task<IResult> HandleErrors(Func<Task> executor)
         {
             try
             {

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace CarManagementApi.Models.Responses
+namespace CarManagementApi.Models.Results
 {
-    public class Failure : IResponse
+    public class Failure : IResult
     {
         public Failure(IEnumerable<string> errors) => Errors = errors;
 

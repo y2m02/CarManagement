@@ -1,6 +1,6 @@
-﻿namespace CarManagementApi.Models.Dtos
+﻿namespace CarManagementApi.Models.Responses
 {
-    public class ModelDto : BaseDto
+    public class ModelResponse : BaseResponse
     {
         public string Name { get; set; }
 

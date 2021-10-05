@@ -4,7 +4,7 @@ using AutoMapper;
 using CarManagementApi.Helpers;
 using CarManagementApi.Models.Entities;
 using CarManagementApi.Models.Requests;
-using CarManagementApi.Models.Responses;
+using CarManagementApi.Models.Results;
 using CarManagementApi.Repositories;
 
 namespace CarManagementApi.Services
@@ -20,9 +20,9 @@ namespace CarManagementApi.Services
             this.repository = repository;
         }
 
-        public Task<IResponse> Register(RegisterAppUserRequest request)
+        public Task<IResult> Register(RegisterAppUserRequest request)
         {
-            return ResponseHandler.HandleErrors(
+            return ResultHandler.HandleErrors(
                 async () =>
                 {
                     var result = await repository
@@ -30,8 +30,8 @@ namespace CarManagementApi.Services
                         .ConfigureAwait(false);
 
                     return result.Succeeded
-                        ? ResponseHandler.Success(new { user = request })
-                        : ResponseHandler.Validations(result.Errors.Select(e => e.Description));
+                        ? ResultHandler.Success(new { user = request })
+                        : ResultHandler.Validations(result.Errors.Select(e => e.Description));
                 }
             );
         }

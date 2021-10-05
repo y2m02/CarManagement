@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using CarManagementApi.Models.Dtos;
 using CarManagementApi.Models.Requests;
 using CarManagementApi.Models.Responses;
+using CarManagementApi.Models.Results;
 using CarManagementApi.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -45,7 +45,7 @@ namespace CarManagementApi.Controllers
                 return InternalServerError(response);
             }
 
-            var brand = (BrandDto)success.Response;
+            var brand = (BrandResponse)success.Response;
 
             return CreatedAtAction(
                 actionName: nameof(GetById),

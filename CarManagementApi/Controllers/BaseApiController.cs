@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Net;
-using CarManagementApi.Models.Responses;
+using CarManagementApi.Models.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,22 +15,22 @@ namespace CarManagementApi.Controllers
             return StatusCode((int)HttpStatusCode.InternalServerError, value);
         }
 
-        protected IActionResult OkResponse(IResponse response)
+        protected IActionResult OkResponse(IResult result)
         {
-            return ValidateResponse(Ok, response);
+            return ValidateResponse(Ok, result);
         }
 
-        protected IActionResult NoContentResponse(IResponse response)
+        protected IActionResult NoContentResponse(IResult result)
         {
-            return ValidateResponse(NoContent, response);
+            return ValidateResponse(NoContent, result);
         }
 
         private IActionResult ValidateResponse(
-            Func<IResponse, ObjectResult> whenSuccess,
-            IResponse response
+            Func<IResult, ObjectResult> whenSuccess,
+            IResult result
         )
         {
-            return response.Succeeded() ? whenSuccess(response) : InternalServerError(response);
+            return result.Succeeded() ? whenSuccess(result) : InternalServerError(result);
         }
 
         private ObjectResult NoContent(object value)

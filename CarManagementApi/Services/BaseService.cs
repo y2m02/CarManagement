@@ -2,24 +2,24 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using CarManagementApi.Helpers;
-using CarManagementApi.Models.Dtos;
 using CarManagementApi.Models.Entities;
 using CarManagementApi.Models.Responses;
+using CarManagementApi.Models.Results;
 using CarManagementApi.Repositories;
 
 namespace CarManagementApi.Services
 {
     public interface IService<in TRequest> where TRequest : class
     {
-        Task<IResponse> GetAll(int pageNumber, int pageSize);
-        Task<IResponse> GetById(int id);
-        Task<IResponse> Add(TRequest request);
-        Task<IResponse> Update(int id, TRequest request);
-        Task<IResponse> Remove(int id);
+        Task<IResult> GetAll(int pageNumber, int pageSize);
+        Task<IResult> GetById(int id);
+        Task<IResult> Add(TRequest request);
+        Task<IResult> Update(int id, TRequest request);
+        Task<IResult> Remove(int id);
     }
 
-    public abstract class BaseService<TEntity, TDto, TRequest>
-        where TDto : BaseDto
+    public abstract class BaseService<TEntity, TResponse, TRequest>
+        where TResponse : BaseResponse
         where TRequest : class
         where TEntity : BaseEntity, new()
 
@@ -36,37 +36,37 @@ namespace CarManagementApi.Services
             repository = unitOfWork.Entity<TEntity>();
         }
 
-        public Task<IResponse> GetAll(int pageNumber, int pageSize)
+        public Task<IResult> GetAll(int pageNumber, int pageSize)
         {
-            return ResponseHandler.HandleErrors(
+            return ResultHandler.HandleErrors(
                 async () =>
                 {
                     var response = await repository
                         .GetAll(pageNumber, pageSize)
                         .ConfigureAwait(false);
 
-                    return ResponseHandler.Success(mapper.Map<List<TDto>>(response));
+                    return ResultHandler.Success(mapper.Map<List<TResponse>>(response));
                 }
             );
         }
 
-        public Task<IResponse> GetById(int id)
+        public Task<IResult> GetById(int id)
         {
-            return ResponseHandler.HandleErrors(
+            return ResultHandler.HandleErrors(
                 async () =>
                 {
                     var response = await repository.GetById(id).ConfigureAwait(false);
 
                     return response is null
-                        ? ResponseHandler.NotFound()
-                        : ResponseHandler.Success(mapper.Map<TDto>(response));
+                        ? ResultHandler.NotFound()
+                        : ResultHandler.Success(mapper.Map<TResponse>(response));
                 }
             );
         }
 
-        public Task<IResponse> Add(TRequest request)
+        public Task<IResult> Add(TRequest request)
         {
-            return ResponseHandler.HandleErrors(
+            return ResultHandler.HandleErrors(
                 async () =>
                 {
                     var mappedEntity = mapper.Map<TEntity>(request);
@@ -78,42 +78,42 @@ namespace CarManagementApi.Services
                         .GetById(mappedEntity.Id)
                         .ConfigureAwait(false);
 
-                    return ResponseHandler.Success(mapper.Map<TDto>(entity));
+                    return ResultHandler.Success(mapper.Map<TResponse>(entity));
                 }
             );
         }
 
-        public Task<IResponse> Update(int id, TRequest request)
+        public Task<IResult> Update(int id, TRequest request)
         {
-            return ResponseHandler.HandleErrors(
+            return ResultHandler.HandleErrors(
                 async () =>
                 {
                     var entity = await repository.GetById(id).ConfigureAwait(false);
 
                     if (entity is null)
                     {
-                        return ResponseHandler.NotFound();
+                        return ResultHandler.NotFound();
                     }
 
                     Update(entity, request);
 
                     await unitOfWork.Complete().ConfigureAwait(false);
 
-                    return ResponseHandler.Success(mapper.Map<TDto>(entity));
+                    return ResultHandler.Success(mapper.Map<TResponse>(entity));
                 }
             );
         }
 
-        public Task<IResponse> Remove(int id)
+        public Task<IResult> Remove(int id)
         {
-            return ResponseHandler.HandleErrors(
+            return ResultHandler.HandleErrors(
                 async () =>
                 {
                     await repository.Remove(id).ConfigureAwait(false);
 
                     await unitOfWork.Complete().ConfigureAwait(false);
 
-                    return ResponseHandler.Success(new { id });
+                    return ResultHandler.Success(new { id });
                 }
             );
         }

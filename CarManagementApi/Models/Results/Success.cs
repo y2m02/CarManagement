@@ -1,6 +1,6 @@
-﻿namespace CarManagementApi.Models.Responses
+﻿namespace CarManagementApi.Models.Results
 {
-    public class Success : IResponse
+    public class Success : IResult
     {
         public Success() { }
 

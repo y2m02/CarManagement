@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace CarManagementApi.Models.Responses
+namespace CarManagementApi.Models.Results
 {
-    public class Validation : IResponse
+    public class Validation : IResult
     {
         public Validation(IEnumerable<string> errors) => Errors = errors;
 

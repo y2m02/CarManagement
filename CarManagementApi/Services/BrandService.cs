@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
-using CarManagementApi.Models.Dtos;
 using CarManagementApi.Models.Entities;
 using CarManagementApi.Models.Requests;
+using CarManagementApi.Models.Responses;
 using CarManagementApi.Repositories;
 
 namespace CarManagementApi.Services
 {
     public interface IBrandService : IService<BrandRequest> { }
 
-    public class BrandService : BaseService<Brand, BrandDto, BrandRequest>, IBrandService
+    public class BrandService : BaseService<Brand, BrandResponse, BrandRequest>, IBrandService
     {
         public BrandService(
             IUnitOfWork unitOfWork,
