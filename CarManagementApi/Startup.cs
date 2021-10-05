@@ -1,7 +1,9 @@
 using System.Linq;
+using System.Net;
 using CarManagementApi.Helpers;
 using CarManagementApi.Models.Entities;
 using CarManagementApi.Repositories;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;

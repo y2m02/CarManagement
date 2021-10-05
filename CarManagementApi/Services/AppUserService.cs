@@ -10,7 +10,13 @@ using Microsoft.AspNetCore.Identity;
 
 namespace CarManagementApi.Services
 {
-    public class AppUserService
+    public interface IAppUserService
+    {
+        Task<IResult> Register(RegisterAppUserRequest request);
+        Task<IResult> SingIn(SignInRequest request);
+    }
+
+    public class AppUserService : IAppUserService
     {
         private readonly IMapper mapper;
         private readonly IAppUserRepository repository;
