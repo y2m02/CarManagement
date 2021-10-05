@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CarManagementApi.Helpers;
@@ -12,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 
 namespace CarManagementApi
 {
@@ -29,8 +31,41 @@ namespace CarManagementApi
         {
             services.AddControllers();
             services.AddRouting(option => option.LowercaseUrls = true);
-            services.AddSwaggerGen(c => c.SwaggerDoc("v1", new() { Title = "CarManagementApi", Version = "v1" }));
             services.AddAutoMapper(option => option.AddProfile<ProfileMapper>());
+
+            services.AddSwaggerGen(
+                option =>
+                {
+                    option.SwaggerDoc("v1", new() { Title = "CarManagementApi", Version = "v1" });
+
+                    option.AddSecurityDefinition(
+                        name: "Bearer",
+                        securityScheme: new OpenApiSecurityScheme
+                        {
+                            In = ParameterLocation.Header,
+                            Description = "Access token",
+                            Name = "Authorization",
+                            Type = SecuritySchemeType.Http,
+                            BearerFormat = "JWT",
+                            Scheme = "bearer",
+                        }
+                    );
+
+                    option.AddSecurityRequirement(
+                        new OpenApiSecurityRequirement
+                        {
+                            [new OpenApiSecurityScheme
+                            {
+                                Reference = new OpenApiReference
+                                {
+                                    Type = ReferenceType.SecurityScheme,
+                                    Id = "Bearer",
+                                },
+                            }] = new List<string>(),
+                        }
+                    );
+                }
+            );
 
             services.AddDbContext<CarManagementContext>(
                 options =>
