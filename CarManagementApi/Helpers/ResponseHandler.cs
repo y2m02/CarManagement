@@ -9,7 +9,10 @@ namespace CarManagementApi.Helpers
     {
         public static Success Success() => new();
 
-        public static Success Success<T>(T response) => new(response);
+        public static Success Success<T>(T response) where T : class
+        {
+            return new(response);
+        }
 
         public static Validation Validations(IEnumerable<string> errors) => new(errors);
 
