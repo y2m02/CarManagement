@@ -6,6 +6,7 @@ using CarManagementApi.Models.Entities;
 using CarManagementApi.Models.Requests;
 using CarManagementApi.Models.Results;
 using CarManagementApi.Repositories;
+using HelpersLibrary.Extensions;
 using Microsoft.AspNetCore.Identity;
 
 namespace CarManagementApi.Services
@@ -14,6 +15,7 @@ namespace CarManagementApi.Services
     {
         Task<IResult> Register(RegisterAppUserRequest request);
         Task<IResult> SingIn(SignInRequest request);
+        Task<IResult> AddToRoles(AddToRolesRequest request);
     }
 
     public class AppUserService : IAppUserService
@@ -69,6 +71,22 @@ namespace CarManagementApi.Services
                     }
 
                     return ResultHandler.Success();
+                }
+            );
+        }
+
+        public Task<IResult> AddToRoles(AddToRolesRequest request)
+        {
+            return ResultHandler.HandleErrors(
+                async () =>
+                {
+                    var result = await repository
+                        .AddToRoles(request.UserId, request.Roles)
+                        .ConfigureAwait(false);
+
+                    return result.Succeeded
+                        ? ResultHandler.Success($"User added to: {request.Roles.Join(",")}")
+                        : ResultHandler.Validations(result.Errors.Select(e => e.Description));
                 }
             );
         }

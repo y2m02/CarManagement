@@ -21,5 +21,13 @@ namespace CarManagementApi.Controllers
 
             return result.HasValidation() ? BadRequest(result) : OkResponse(result);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Register([FromBody] AddToRolesRequest request)
+        {
+            var result = await service.AddToRoles(request).ConfigureAwait(false);
+
+            return result.HasValidation() ? BadRequest(result) : OkResponse(result);
+        }
     }
 }

@@ -11,8 +11,8 @@ namespace CarManagementApi.Repositories
     {
         Task<List<AppUser>> GetAll();
         Task<IdentityResult> Add(AppUser user, string password);
-        Task<IdentityResult> AddToRole(AppUser user, string role);
-        Task<IdentityResult> AddToRoles(AppUser user, IEnumerable<string> roles);
+        Task<IdentityResult> AddToRole(string id, string role);
+        Task<IdentityResult> AddToRoles(string id, IEnumerable<string> roles);
         Task<List<string>> GetRoles(string userName);
     }
 
@@ -35,14 +35,14 @@ namespace CarManagementApi.Repositories
             return userManager.CreateAsync(user, password);
         }
 
-        public Task<IdentityResult> AddToRole(AppUser user, string role)
+        public Task<IdentityResult> AddToRole(string id, string role)
         {
-            return userManager.AddToRoleAsync(user, role);
+            return userManager.AddToRoleAsync(new AppUser { Id = id }, role);
         }
 
-        public Task<IdentityResult> AddToRoles(AppUser user, IEnumerable<string> roles)
+        public Task<IdentityResult> AddToRoles(string id, IEnumerable<string> roles)
         {
-            return userManager.AddToRolesAsync(user, roles);
+            return userManager.AddToRolesAsync(new AppUser { Id = id }, roles);
         }
 
         public async Task<List<string>> GetRoles(string userName)
