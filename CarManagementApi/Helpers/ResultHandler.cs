@@ -9,7 +9,7 @@ namespace CarManagementApi.Helpers
     {
         public static Success Success() => new();
 
-        public static Success Success<T>(T response) where T : class
+        public static Success Success<T>(T response)
         {
             return new(response);
         }
