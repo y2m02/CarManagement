@@ -14,7 +14,7 @@ namespace CarManagementApi.Services
     public interface IAppUserService
     {
         Task<IResult> Register(RegisterAppUserRequest request);
-        Task<IResult> SingIn(SignInRequest request);
+        Task<IResult> SignIn(SignInRequest request);
         Task<IResult> AddToRoles(AddToRolesRequest request);
     }
 
@@ -51,7 +51,7 @@ namespace CarManagementApi.Services
             );
         }
 
-        public Task<IResult> SingIn(SignInRequest request)
+        public Task<IResult> SignIn(SignInRequest request)
         {
             return ResultHandler.HandleErrors(
                 async () =>
