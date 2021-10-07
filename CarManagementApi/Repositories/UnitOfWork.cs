@@ -10,7 +10,7 @@ namespace CarManagementApi.Repositories
         IModelRepository Models { get; }
         IVehicleRepository Vehicles { get; }
 
-        BaseRepository<TEntity> Entity<TEntity>() where TEntity : BaseEntity, new();
+        Repository<TEntity> Entity<TEntity>() where TEntity : BaseEntity, new();
         Task Complete();
     }
 
@@ -34,9 +34,9 @@ namespace CarManagementApi.Repositories
 
         public Task Complete() => context.SaveChangesAsync();
 
-        public BaseRepository<TEntity> Entity<TEntity>() where TEntity : BaseEntity, new()
+        public Repository<TEntity> Entity<TEntity>() where TEntity : BaseEntity, new()
         {
-            return new BaseRepository<TEntity>(context);
+            return new Repository<TEntity>(context);
         }
     }
 }

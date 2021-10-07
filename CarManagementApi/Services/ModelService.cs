@@ -8,7 +8,7 @@ namespace CarManagementApi.Services
 {
     public interface IModelService : IService<ModelRequest> { }
 
-    public class ModelService : BaseService<Model, ModelResponse, ModelRequest>, IModelService
+    public class ModelService : Service<Model, ModelResponse, ModelRequest>, IModelService
     {
         public ModelService(
             IUnitOfWork unitOfWork,

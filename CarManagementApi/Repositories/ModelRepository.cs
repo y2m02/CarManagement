@@ -7,7 +7,7 @@ namespace CarManagementApi.Repositories
 {
     public interface IModelRepository : IRepository<Model> { }
 
-    public class ModelRepository : BaseRepository<Model>, IModelRepository
+    public class ModelRepository : Repository<Model>, IModelRepository
     {
         public ModelRepository(CarManagementContext context) : base(context) { }
 

@@ -8,7 +8,7 @@ namespace CarManagementApi.Services
 {
     public interface IBrandService : IService<BrandRequest> { }
 
-    public class BrandService : BaseService<Brand, BrandResponse, BrandRequest>, IBrandService
+    public class BrandService : Service<Brand, BrandResponse, BrandRequest>, IBrandService
     {
         public BrandService(
             IUnitOfWork unitOfWork,

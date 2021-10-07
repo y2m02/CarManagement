@@ -18,17 +18,17 @@ namespace CarManagementApi.Services
         Task<IResult> Remove(int id);
     }
 
-    public abstract class BaseService<TEntity, TResponse, TRequest>
+    public abstract class Service<TEntity, TResponse, TRequest>
         where TResponse : BaseResponse
         where TRequest : class
         where TEntity : BaseEntity, new()
 
     {
-        protected readonly IMapper mapper;
-        protected readonly IUnitOfWork unitOfWork;
-        private readonly BaseRepository<TEntity> repository;
+        private readonly IMapper mapper;
+        private readonly IUnitOfWork unitOfWork;
+        private readonly Repository<TEntity> repository;
 
-        protected BaseService(IUnitOfWork unitOfWork, IMapper mapper)
+        protected Service(IUnitOfWork unitOfWork, IMapper mapper)
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;

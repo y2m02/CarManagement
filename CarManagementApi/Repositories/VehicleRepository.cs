@@ -7,7 +7,7 @@ namespace CarManagementApi.Repositories
 {
     public interface IVehicleRepository : IRepository<Vehicle> { }
 
-    public class VehicleRepository : BaseRepository<Vehicle>, IVehicleRepository
+    public class VehicleRepository : Repository<Vehicle>, IVehicleRepository
     {
         public VehicleRepository(CarManagementContext context) : base(context) { }
 

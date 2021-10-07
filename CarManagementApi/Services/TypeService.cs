@@ -8,7 +8,7 @@ namespace CarManagementApi.Services
 {
     public interface ITypeService : IService<TypeRequest> { }
 
-    public class TypeService : BaseService<Type, TypeResponse, TypeRequest>, ITypeService
+    public class TypeService : Service<Type, TypeResponse, TypeRequest>, ITypeService
     {
         public TypeService(
             IUnitOfWork unitOfWork,
