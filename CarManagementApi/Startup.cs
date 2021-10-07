@@ -71,7 +71,7 @@ namespace CarManagementApi
                 options =>
                 {
                     options.EnableSensitiveDataLogging();
-                    options.UseSqlServer(Configuration.GetConnectionString("CarManagementConnection"));
+                    options.UseSqlServer(Configuration.GetConnectionString("CarManagementConnectionHome"));
                 }
             );
 
