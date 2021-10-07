@@ -96,6 +96,7 @@ namespace CarManagementApi
 
                         option.TokenValidationParameters = new()
                         {
+                            RequireExpirationTime = true,
                             ValidateIssuer = true,
                             ValidIssuer = Configuration["JWT:ValidIssuer"],
                             ValidateAudience = true,
