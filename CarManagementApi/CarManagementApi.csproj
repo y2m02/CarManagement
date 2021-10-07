@@ -23,7 +23,7 @@
 
   <ItemGroup>
     <Reference Include="HelpersLibrary.Extensions">
-      <HintPath>..\..\..\Repositories\HelpersLibrary\HelpersLibrary\Extensions\bin\Debug\net5.0\HelpersLibrary.Extensions.dll</HintPath>
+      <HintPath>..\HelpersLibrary.Extensions.dll</HintPath>
     </Reference>
   </ItemGroup>
 
